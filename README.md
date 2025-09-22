@@ -1,52 +1,53 @@
-# Ecommerce
-Projeto lógico de banco de dados de e-commerce com MySQL.
+# 🛒 Projeto Lógico de Banco de Dados - E-commerce
 
+Este repositório contém o **projeto lógico de banco de dados** para um sistema de E-commerce, modelado em MySQL.
 
-Este repositório contém o **projeto lógico de banco de dados** desenvolvido como parte de um desafio de modelagem e implementação em SQL para um cenário de **e-commerce**.  
-O objetivo é apresentar a modelagem refinada, o esquema lógico e as queries SQL para atender requisitos de negócio com **integridade referencial** e **normalização**.
-
----
-
-## 📚 Contexto do Projeto
-
-A aplicação simula um **sistema de vendas online**, permitindo:
-- Cadastro de **clientes** (Pessoa Física ou Pessoa Jurídica)
-- Registro de **fornecedores** e seus produtos
-- Criação de **pedidos** com múltiplos itens
-- Controle de **estoque** e **entregas**
-- Registro de **pagamentos múltiplos** por pedido
-
-O modelo foi construído a partir de um **Modelo Entidade-Relacionamento Estendido (EER)**, posteriormente mapeado para o modelo relacional com aplicação de **refinamentos**.
+O objetivo é representar as entidades, relacionamentos e regras de negócio de um e-commerce, permitindo consultas analíticas e operacionais.
 
 ---
 
-## 🔑 Requisitos Atendidos
+## 📊 Contexto do Projeto
+O esquema lógico foi projetado para atender operações comuns de um e-commerce, incluindo:
 
-| Requisito | Implementação |
-|-----------|----------------|
-| **Cliente PF ou PJ** | Especialização exclusiva (XOR) com tabelas `ClientePF` e `ClientePJ` |
-| **Pagamento Múltiplo** | Um pedido pode ter várias formas de pagamento (1:N) |
-| **Entrega** | Cada pedido pode ter uma ou mais entregas, com status e código de rastreio |
-| **Fornecedor/Produto** | Relacionamento N:N (`ProdutoFornecedor`) para indicar quem fornece cada produto |
-| **Integridade** | Chaves primárias, estrangeiras, UNIQUE e CHECK constraints para manter consistência |
-
----
-
-## 🗂️ Estrutura do Banco
-
-### Principais Tabelas
-- **Cliente**: Dados comuns de clientes PF e PJ.
-- **ClientePF** / **ClientePJ**: Especialização exclusiva para pessoas físicas ou jurídicas.
-- **Fornecedor**: Empresas fornecedoras de produtos.
-- **Produto**: Itens comercializados, com estoque e categoria.
-- **ProdutoFornecedor**: Relação N:N entre fornecedores e produtos.
-- **Pedido**: Registro dos pedidos realizados pelos clientes.
-- **ItemPedido**: Itens e quantidades dentro de cada pedido.
-- **Pagamento**: Formas de pagamento (1:N com Pedido).
-- **Entrega**: Informações de envio, status e código de rastreio.
-- **Categoria**: Classificação dos produtos.
+- **Clientes** podem ser **Pessoa Física (PF)** ou **Pessoa Jurídica (PJ)**  
+  - Uma conta **não** pode ter as duas informações simultaneamente.
+- **Pedidos** com múltiplos itens e **múltiplas formas de pagamento**.
+- **Entrega** com status e **código de rastreio**.
+- Produtos podem ter **diversos fornecedores** e pertencer a **categorias**.
 
 ---
 
-## 🏗️ Modelo Lógico (Resumo)
+## 🗂️ Estrutura do Repositório
+| Arquivo | Descrição |
+|---------|-----------|
+| [`schema.sql`](sql/schema.sql) | Script de criação do banco de dados e tabelas (DDL). |
+| [`data.sql`](sql/data.sql) | Inserts de dados de teste. |
+| [`queries.sql`](sql/queries.sql) | Consultas SQL para validação e análise. |
+| [`docs/er_diagram.png`](docs/er_diagram.png) | Diagrama EER (opcional). |
 
+---
+
+## 🏛️ Modelo Lógico Resumido
+Principais entidades e relacionamentos:
+
+- **Cliente**(`id_cliente` PK, nome, email UNIQUE, telefone, data_cadastro)  
+- **ClientePF**(`id_cliente` PK/FK → Cliente, cpf UNIQUE)  
+- **ClientePJ**(`id_cliente` PK/FK → Cliente, cnpj UNIQUE, razao_social)  
+- **Endereco**(`id_endereco` PK, id_cliente FK, logradouro, numero, cidade, estado, cep, tipo_endereco)  
+- **Fornecedor**(`id_fornecedor` PK, nome, cnpj UNIQUE)  
+- **Categoria**(`id_categoria` PK, nome UNIQUE)  
+- **Produto**(`id_produto` PK, nome, descricao, preco, estoque, id_categoria FK)  
+- **ProdutoFornecedor**(`id_fornecedor` FK, id_produto` FK, PK(id_fornecedor, id_produto))  
+- **Pedido**(`id_pedido` PK, id_cliente FK, data_pedido, status, valor_frete)  
+- **ItemPedido**(`id_item` PK, id_pedido FK, id_produto FK, quantidade, preco_unitario)  
+- **Pagamento**(`id_pagamento` PK, id_pedido FK, tipo, valor, data_pagamento) — 1:N  
+- **Entrega**(`id_entrega` PK, id_pedido FK, codigo_rastreio UNIQUE, status)
+
+---
+
+## 🔧 Como Executar
+1. **Clone** este repositório ou faça download do `.zip`.
+2. Em seu cliente MySQL (Workbench, DBeaver ou CLI):
+   ```sql
+   SOURCE sql/schema.sql;
+   SOURCE sql/data.sql;
