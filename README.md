@@ -20,10 +20,9 @@ O esquema lógico foi projetado para atender operações comuns de um e-commerce
 ## 🗂️ Estrutura do Repositório
 | Arquivo | Descrição |
 |---------|-----------|
-| [`schema.sql`](sql/schema.sql) | Script de criação do banco de dados e tabelas (DDL). |
-| [`data.sql`](sql/data.sql) | Inserts de dados de teste. |
-| [`queries.sql`](sql/queries.sql) | Consultas SQL para validação e análise. |
-| [`docs/er_diagram.png`](docs/er_diagram.png) | Diagrama EER (opcional). |
+| [`sql/schema.sql`](sql/schema.sql) | Script de criação do banco e tabelas (DDL). |
+| [`sql/data.sql`](sql/data.sql) | Inserts de dados de teste. |
+| [`sql/queries.sql`](sql/queries.sql) | Consultas SQL para validação e análise. |
 
 ---
 
